@@ -15,10 +15,7 @@ const loginSchema = z.object({
 
 export default {
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
+    Google,
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
