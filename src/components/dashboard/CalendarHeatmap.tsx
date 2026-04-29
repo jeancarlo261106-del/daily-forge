@@ -1,6 +1,6 @@
 "use client";
 
-import { getProgressColor } from "@/lib/utils";
+import { getProgressColor, getTodayString } from "@/lib/utils";
 import type { CalendarDay } from "@/types/index";
 
 interface CalendarHeatmapProps {
@@ -24,7 +24,7 @@ export default function CalendarHeatmap({
 }: CalendarHeatmapProps) {
   // First day of month (0 = Sunday)
   const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
-  const today = new Date().toISOString().split("T")[0];
+  const today = getTodayString();
 
   const prevMonth = () => {
     if (month === 1) onChangeMonth(year - 1, 12);

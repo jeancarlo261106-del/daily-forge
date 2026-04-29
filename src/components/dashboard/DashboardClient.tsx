@@ -7,7 +7,7 @@ import WeeklyChart from "@/components/dashboard/WeeklyChart";
 import CalendarHeatmap from "@/components/dashboard/CalendarHeatmap";
 import EntryList from "@/components/dashboard/EntryList";
 import QuickAdd from "@/components/dashboard/QuickAdd";
-import { getGreeting, formatDateDisplay } from "@/lib/utils";
+import { getGreeting, formatDateDisplay, getNowBR } from "@/lib/utils";
 import type {
   DailyProgress,
   WeeklyDataPoint,
@@ -72,7 +72,7 @@ export default function DashboardClient({
   };
 
   const greeting = getGreeting();
-  const today = formatDateDisplay(new Date());
+  const today = formatDateDisplay(getNowBR());
 
   const containerVariants = {
     hidden: { opacity: 0 },

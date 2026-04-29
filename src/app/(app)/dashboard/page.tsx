@@ -7,12 +7,13 @@ import {
   getCalendarData,
 } from "@/actions/protein";
 import DashboardClient from "@/components/dashboard/DashboardClient";
+import { getNowBR } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user) redirect("/login");
 
-  const now = new Date();
+  const now = getNowBR();
   const calendarYear = now.getFullYear();
   const calendarMonth = now.getMonth() + 1;
 

@@ -1,9 +1,43 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-/** Retorna a data atual no formato "YYYY-MM-DD" */
+const TIMEZONE = "America/Sao_Paulo";
+
+/**
+ * Retorna a data/hora atual no fuso de São Paulo.
+ * Isso garante que tanto no servidor (UTC) quanto no cliente,
+ * "hoje" sempre corresponda ao dia correto no Brasil.
+ */
+export function getNowBR(): Date {
+  const nowUTC = new Date();
+  // Formata a data no fuso BR e reconstrói como Date local
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(nowUTC);
+
+  const get = (type: string) =>
+    parts.find((p) => p.type === type)?.value ?? "0";
+
+  return new Date(
+    Number(get("year")),
+    Number(get("month")) - 1,
+    Number(get("day")),
+    Number(get("hour")),
+    Number(get("minute")),
+    Number(get("second"))
+  );
+}
+
+/** Retorna a data atual (fuso BR) no formato "YYYY-MM-DD" */
 export function getTodayString(): string {
-  return format(new Date(), "yyyy-MM-dd");
+  return format(getNowBR(), "yyyy-MM-dd");
 }
 
 /** Formata data para exibição (ex: "28 de abril") */
@@ -18,9 +52,9 @@ export function formatTime(date: Date | string): string {
   return format(d, "HH:mm");
 }
 
-/** Retorna saudação baseada na hora atual */
+/** Retorna saudação baseada na hora atual (fuso BR) */
 export function getGreeting(): string {
-  const hour = new Date().getHours();
+  const hour = getNowBR().getHours();
   if (hour < 12) return "Bom dia";
   if (hour < 18) return "Boa tarde";
   return "Boa noite";
@@ -34,11 +68,12 @@ export function getProgressColor(percentage: number): string {
   return "#FF453A"; // vermelho
 }
 
-/** Retorna os últimos N dias como strings "YYYY-MM-DD" */
+/** Retorna os últimos N dias como strings "YYYY-MM-DD" (fuso BR) */
 export function getLastNDays(n: number): string[] {
   const days: string[] = [];
+  const now = getNowBR();
   for (let i = n - 1; i >= 0; i--) {
-    const d = new Date();
+    const d = new Date(now);
     d.setDate(d.getDate() - i);
     days.push(format(d, "yyyy-MM-dd"));
   }
